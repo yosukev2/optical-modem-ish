@@ -1,0 +1,64 @@
+# ============================================
+# Git Commit Message Template (Conventional-ish)
+# ============================================
+# 目的:
+# - 何を / なぜ / 影響範囲 を短く明確に残す
+# - 後から log/grep/release note が作りやすい形にする
+#
+# 書式:
+# <type>(<scope>): <subject>
+#
+# 例:
+# feat(fw): add SPI framing for optical link
+# fix(hw): correct TOSLINK RX pull-up value
+# docs(readme): add bring-up steps
+#
+# ----------------------------
+# type の目安（迷ったらこれ）
+# ----------------------------
+# feat     : 新機能追加（ユーザー価値が増える）
+# fix      : バグ修正（意図した動作に戻す）
+# refactor : 振る舞いを変えない内部改善（整理・置換）
+# perf     : 性能改善（速度・メモリ・レイテンシ）
+# test     : テスト追加/修正
+# docs     : ドキュメントのみ変更
+# build    : ビルド周り（toolchain / CMake / npm / pip等）
+# ci       : CI設定（GitHub Actionsなど）
+# chore    : 雑務（生成物/依存更新/コメント整理など）
+# revert   : 取り消し
+#
+# scope の目安（任意だけどあると便利）
+# hw / pcb / fw / sw / boot / proto / ci / docs / deps / tools / test
+#
+# subject の書き方（超重要）
+# - 50文字くらいまで / 先頭は小文字推奨（英語の場合）
+# - "what" を書く（"why" は body へ）
+# - 句点は付けない
+# - "update", "fix stuff" みたいな曖昧語を避ける
+#
+# body の書き方（必要なときだけ）
+# - なぜ変更したか（理由/背景）
+# - どう変わるか（挙動の差分）
+# - 影響範囲（互換性/リスク/設定変更）
+#
+# footer の目安
+# - 関連Issue: #123
+# - 破壊的変更: BREAKING CHANGE: ...
+#
+# ----------------------------
+# 本文（ここから下を書き換える）
+# ----------------------------
+
+type(scope): subject
+
+# Why:
+# - 
+
+# What:
+# - 
+
+# Impact:
+# - 
+
+# Related:
+# - Issue: #
