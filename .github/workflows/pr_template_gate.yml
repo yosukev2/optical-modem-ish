@@ -1,0 +1,81 @@
+name: PR Template Gate
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  validate:
+    name: Validate PR body (DoD + Evidence)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required checkboxes and evidence
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = (context.payload.pull_request.body || "").trim();
+
+            const requiredCheckboxes = [
+              "変更理由が説明できる（Whyが書けている）",
+              "証拠（ログ/スクショ/測定結果）がある",
+              "必要な docs が更新されている",
+              "回帰テストが追加/更新されている（該当する場合）",
+            ];
+
+            // --- 1) チェックボックス判定 ---
+            const missingChecks = [];
+            for (const text of requiredCheckboxes) {
+              const re = new RegExp(`- \\[[xX]\\] ${text.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}`);
+              if (!re.test(body)) missingChecks.push(text);
+            }
+
+            // --- 2) 証拠欄（ログ/テスト）簡易判定 ---
+            // 「テストしたか（Evidence: ログ/スクショ）」セクションに何か書かれているかを見る
+            // 期待：チェックボックスだけでなく、ログ貼付・リンク・コマンド結果などが書かれていること
+            function extractSection(md, heading) {
+              const idx = md.indexOf(heading);
+              if (idx === -1) return "";
+              const rest = md.slice(idx + heading.length);
+              // 次の "## " までをセクションとして切り出し
+              const next = rest.search(/\n##\s+/);
+              return (next === -1 ? rest : rest.slice(0, next)).trim();
+            }
+
+            const evidenceSection = extractSection(body, "## テストしたか（Evidence: ログ/スクショ）");
+            // セクションが存在しない or 中身がほぼ空（チェックボックスしかない等）ならNG
+            // 「- [ ]」や「- [x]」だけの行を除去して残りがあるかを見る
+            const evidenceNonChecklist = evidenceSection
+              .split("\n")
+              .filter(line => !/^\s*-\s*\[[ xX]\]\s*/.test(line))
+              .join("\n")
+              .trim();
+
+            const evidenceMissing =
+              !evidenceSection ||
+              evidenceNonChecklist.length < 10; // 10文字未満は実質空扱い（調整可）
+
+            const errors = [];
+            if (missingChecks.length) {
+              errors.push(
+                "PRテンプレのDoDチェックが未完了です:\n" +
+                missingChecks.map(s => `- ${s}`).join("\n")
+              );
+            }
+            if (evidenceMissing) {
+              errors.push(
+                "「## テストしたか（Evidence: ログ/スクショ）」が空です。\n" +
+                "- 実行したテストコマンド\n" +
+                "- ログ貼付（またはログファイルへのリンク）\n" +
+                "- スクショ/測定結果（必要なら）\n" +
+                "のいずれかを本文に記載してください。"
+              );
+            }
+
+            if (errors.length) {
+              core.setFailed(errors.join("\n\n"));
+            } else {
+              core.info("OK: DoD + Evidence are present.");
+            }

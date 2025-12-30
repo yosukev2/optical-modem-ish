@@ -1,0 +1,52 @@
+name: Issue Label Guard
+
+on:
+  issues:
+    types: [opened, edited, reopened, labeled, unlabeled]
+
+permissions:
+  issues: write
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Warn if issue has no labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const labels = (issue.labels || []).map(l => l.name);
+
+            // ラベルが1つも無ければ警告コメント＋needs-triage付与（おすすめ）
+            if (labels.length === 0) {
+              const owner = context.repo.owner;
+              const repo = context.repo.repo;
+              const issue_number = issue.number;
+
+              const body =
+                "⚠️ **ラベルが付いていません。**\n\n" +
+                "このリポジトリでは運用上、最低限のラベル付与を推奨します：\n" +
+                "- 領域：`hw` / `fw` / `tools` / `docs` / `test`\n" +
+                "- 種別：`bug`（不具合の場合）\n" +
+                "- 優先度：`P0` / `P1` / `P2`\n\n" +
+                "ラベルを付けると、後から検索・優先度判断・担当切り分けが一気に楽になります。";
+
+              await github.rest.issues.createComment({
+                owner, repo, issue_number,
+                body
+              });
+
+              // 自動で needs-triage ラベルを付けたい場合（未作成なら先に作ってください）
+              const TRIAGE_LABEL = "needs-triage";
+              try {
+                await github.rest.issues.addLabels({
+                  owner, repo, issue_number,
+                  labels: [TRIAGE_LABEL]
+                });
+              } catch (e) {
+                core.info(`(info) '${TRIAGE_LABEL}' label not found or cannot be added: ${e.message}`);
+              }
+            } else {
+              core.info(`OK: issue has labels: ${labels.join(", ")}`);
+            }
