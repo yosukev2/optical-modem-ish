@@ -1,13 +1,14 @@
 # Spec: Optical Link Modem (RP2040 + PLT133/PLR237)
 
 > **SPEC FREEZE (v0.1 / W1)**  
-> 本仕様は **W1以降 原則凍結** とする。変更が必要な場合は **Issue 経由**で、理由・影響範囲・代替案・必要なテスト更新（test_plan / log_format 等）を明記して合意した後に反映する（直接編集での変更は禁止）。
+> 本仕様は原則確定版。変更が必要な場合は **Issue 経由**で、理由・影響範囲・代替案・必要なテスト更新（test_plan / log_format 等）を明記した後に反映。
 
 ## 0. 関連ドキュメント（正）
 - Protocol詳細（フレーム/同期/状態遷移）: `docs/protocol.md`
 - ログ列定義（CSVの一次ソース）: `docs/log_format.md`
 - テスト計画（試験ID/合否基準/条件マトリクス）: `docs/test_plan.md`
 - CLI仕様: `docs/cli.md`
+- 部品根拠（データシート抜粋/購入リンク/代替候補）: `docs/parts.md`
 
 ---
 
@@ -28,6 +29,7 @@ PLT133（Tx）/PLR237（Rx）のTOSLINK系モジュールを用いた低速の�
 - Optical modules（Photolink系）
   - Tx: **PLT133/T10W**
   - Rx: **PLR237/T10BK**
+- 部品の採用理由・一次ソース（データシート抜粋）・購入リンク・代替候補は **`docs/parts.md` を正** とする（specは凍結運用のまま）
 - GPIO Logic level: **3.3V**
 - Optical module Vcc:
   - **Tx(Vcc)=3.3V**
