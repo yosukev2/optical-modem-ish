@@ -10,19 +10,18 @@
 
 | 区分 | 採用品（MPN / 型番） | 役割 | 一次ソース（データシート等） | 購入リンク（参考） | 備考 |
 |---|---|---|---|---|---|
-| MCUボード | **Raspberry Pi Pico (RP2040)** | W2の実機Bring-up、W3以降はヘッダ互換で載せ替え想定 | RP2040 Datasheet（I/O絶対最大・VIH/VILの根拠） | Amazon（購入品）: https://www.amazon.co.jp/dp/B09229YRR4 | **Pico W / Pico 2 ではなく Pico（RP2040）前提** |
-| Optical Tx | **Everlight PLT133/T10W** | POF光送信（TOSLINK系） | データシート（VCC/入力レベル/絶対最大/推奨回路） | （任意） | W2は3.3V動作で使用 |
-| Optical Rx | **Everlight PLR237/T10BK** | POF光受信（TOSLINK系） | データシート（VCC/出力レベル/推奨回路） | （任意） | W2は3.3V動作で使用 |
-| POFファイバ | **TOSLINK 光デジタルケーブル 1.0m** | Tx–Rxの接続（W2疎通確認） | 規格はTOSLINK/POF想定 | Amazon（購入品）: https://www.amazon.co.jp/dp/B00L3KO5WK | “オーディオ用”でOK（まず動かす） |
+| MCUボード | **Raspberry Pi Pico (RP2040)** | W2の実機Bring-up、W3以降はヘッダ互換で載せ替え想定 | RP2040 Datasheet（I/O絶対最大・VIH/VILの根拠） | [Amazon] (https://www.amazon.co.jp/dp/B09229YRR4) | **Pico W / Pico 2 ではなく Pico（RP2040）前提** |
+| Optical Tx | **Everlight PLT133/T10W** | POF光送信（TOSLINK系） | データシート（VCC/入力レベル/絶対最大/推奨回路） |[マルツ](https://www.marutsu.co.jp/pc/i/41237282/) | W2は3.3V動作で使用 |
+| Optical Rx | **Everlight PLR237/T10BK** | POF光受信（TOSLINK系） | データシート（VCC/出力レベル/推奨回路） | [マルツ](https://www.marutsu.co.jp/pc/i/13672939/) | W2は3.3V動作で使用 |
+| POFファイバ | **TOSLINK 光デジタルケーブル 1.0m** | Tx–Rxの接続（W2疎通確認） | 規格はTOSLINK/POF想定 | [Amazon（購入品）](https://www.amazon.co.jp/dp/B00L3KO5WK)  | “オーディオ用”でOK（まず動かす） |
 | 電源（W3以降） | Polyfuse / TVS / LDO | VBUS(5V)→保護→3.3V | TBD | TBD | **W2はPicoの3V3(OUT)給電**、W3から基板で正式化 |
 
 ### 1.1 採用理由（入手性メモ）
 - **PLT133/PLR237 を採用した理由**：購入可能な候補が実質これに収束したため（入手性優先）。
-- ただし「入手性」だけだとレビューで弱いので、**電源電圧とI/Oレベル整合**は下の根拠表で必ず説明できる状態にする。
 
-## 2. “突っ込まれても崩れない”整合説明（電源電圧とI/Oレベル）
+## 2. 整合説明（電源電圧とI/Oレベル）
 
-**前提**：W2/W3ともに信号レベルは **3.3V系**（RP2040 IOVDD=3.3V）で統一する。
+**前提**：信号レベルは **3.3V系**（RP2040 IOVDD=3.3V）で統一する。
 
 ### 2.1 RP2040（Pico側）の入力条件（根拠）
 - 入力 High 判定（IOVDD=3.3V）: **VIH(min)=2.0V**
@@ -40,7 +39,6 @@
 - PLR237 出力条件（Vcc=3.3V条件の項あり）: **VOH(min)=2.5V**, **VOL(max)=0.6V**
 - したがって、VOH(2.5V) > RP2040 VIH(min)(2.0V)、VOL(0.6V) < RP2040 VIL(max)(0.8V) となり、3.3V系で論理整合が取れる。
 
-> これで「なぜ 3.3Vで壊れずに読めるの？」に数字で答えられます。
 
 ## 3. 根拠表（データシート抜粋）
 
