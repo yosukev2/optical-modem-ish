@@ -44,17 +44,28 @@
 
 ### 3.1 Everlight PLT133/T10W（Tx）
 
-| 項目 | 値（データシートから） | 設計での意味 |
-|---|---|---|
-| 推奨 VCC | 3.0〜5.5 V | 3.3V運用が可能 |
-| 入力レベル | Vih(min)=2.0 V / Vil(max)=0.8 V | RP2040のGPIOと整合 |
-| 消費電流 | Icc (typ)=3 mA, (max)=10 mA | W2のPico 3V3(OUT)給電でも mA級 |
-| 絶対最大 | Vin <= Vcc + 0.5 V | 5V直結を避ける理由 |
-| 推奨デカップリング | 0.1µF（推奨回路） | モジュール近傍に配置必須 |
-| 一次ソース | Everlight datasheet | URLは次項 |
+> **設計メモ**
+> - データシートは「推奨動作（Recommended）」と「絶対最大（Absolute Max）」を2段階で設計し、**推奨内に余裕を持って入れ**て設計、絶対最大は**一度でも超えると破損リスク**があるため死守するように設計。
+> - 同様に、Vcc / Vin は「平均」ではなく **最悪値（min/max）**で判断する。特に **電源OFF中にVinが入る（逆給電）**が事故りやすい。
 
-- データシート: https://media.digikey.com/pdf/Data%20Sheets/Everlight%20PDFs/PLT133_T10W.pdf
+| 分類 | パラメータ | MIN | TYP | MAX | 単位 | 設計での意味（チェック観点） |
+|---|---:|---:|---:|---:|---|---|
+| 推奨動作 | Vcc（Supply Voltage） | 2.7 | 3.0 | 5.50 | V | 3.3V系で動作可。電源リップル/瞬断を含めて **2.7–5.5V** に収める。 |
+| 入力（TTL） | Vih（High判定） | 2.0 | - | - | V | 駆動元GPIOのHighが2.0V以上であること（3.3V GPIOならOK）。 |
+| 入力（TTL） | Vil（Low判定） | - | - | 0.8 | V | 駆動元GPIOのLowが0.8V以下であること（0VならOK）。 |
+| 消費（電源） | Icc（Dissipation current） | 3 | 5.5* | 10 | mA | 電源容量・発熱の見積りは **MAX(10mA)** を使う。*TYPはSelection Guideの代表値。 |
+| 絶対最大 | Vcc | -0.5 | - | 7 | V | **Vcc > 7V は破損リスク**。電源過渡（挿抜/スパイク）も含めて踏まない。 |
+| 絶対最大 | Vin（DC input） | -0.5 | - | Vcc+0.5 | V | **Vin > Vcc+0.5V は破損リスク**（Vcc OFF中のGPIO Highなどで起きる）。**Vin < -0.5V も破損リスク**。 |
+| 推奨回路 | デカップリング | 0.1 | - | - | µF | **最低0.1µF** をVcc–GND間に実装。部品近傍（目安：**7mm以内**）に置いて電源ループを最小化。 |
+| 注意事項 | 電源OFF時の条件 | - | - | - | - | 「電源OFF時は **Vin と Vcc を一緒に切る**」旨の注意あり。Vcc=0のままVinを駆動しない（逆給電防止）。 |
+| 注意事項 | 入力未定義（FLOAT） | - | - | - | - | Vccが有効でも **Vin=FLOATINGでLEDがONになり得る**。起動直後/リセット中にVinを浮かせない（FWでLow、回路でプルダウン）。 |
 
+**“壊れる条件”（要点）**  
+- **Vin が Vcc+0.5V を超える**（例：Vcc OFF中にGPIO High、5V信号直結）  
+- **Vin が -0.5V 未満になる**（負電圧・リンギング）  
+- **Vcc が 7V を超える**（電源スパイク含む）
+
+- 一次ソース: Everlight PLT133/T10W datasheet（Rev.5）
 ### 3.2 Everlight PLR237/T10BK（Rx）
 
 | 項目 | 値（データシートから） | 設計での意味 |
@@ -65,7 +76,7 @@
 | 推奨デカップリング | 0.1µF（推奨回路） | 受信側は特に不安定化しやすい |
 | 一次ソース | Everlight datasheet | URLは次項 |
 
-- データシート: https://media.digikey.com/pdf/Data%20Sheets/Everlight%20PDFs/PLR237_T10BK.pdf
+- データシート: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5335/PLR237-T10BK_Rev1_3-30-21.pdf
 
 ### 3.3 RP2040（参考：I/O絶対最大 & 入力閾値）
 - データシート: https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
