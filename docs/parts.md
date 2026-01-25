@@ -36,9 +36,8 @@
 - したがって、RP2040の 0/3.3V GPIO は PLT133 の入力条件を満たし、かつ絶対最大も超えない（Vcc=3.3V運用）。
 
 ### 2.3 PLR237（Rx出力）→ RP2040 GPIO 入力の整合
-- PLR237 出力条件（Vcc=3.3V条件の項あり）: **VOH(min)=2.5V**, **VOL(max)=0.6V**
-- したがって、VOH(2.5V) > RP2040 VIH(min)(2.0V)、VOL(0.6V) < RP2040 VIL(max)(0.8V) となり、3.3V系で論理整合が取れる。
-
+- [cite_start]PLR237 出力条件（Rev.1）: **VOH(min)=Vcc-0.4V**（@3.3V時 2.9V）[cite: 1351][cite_start], **VOL(max)=0.5V** 
+- したがって、VOH(2.9V) > RP2040 VIH(min)(2.0V)、VOL(0.5V) < RP2040 VIL(max)(0.8V) となり、3.3V系で論理整合が取れる。
 
 ## 3. 根拠表（データシート抜粋）
 
@@ -68,13 +67,16 @@
 - 一次ソース: Everlight PLT133/T10W datasheet（Rev.5）
 ### 3.2 Everlight PLR237/T10BK（Rx）
 
-| 項目 | 値（データシートから） | 設計での意味 |
-|---|---|---|
-| 推奨 VCC | 3.0〜5.5 V | 3.3V運用が可能 |
-| 出力レベル | VOH(min)=2.5 V（@Vcc=3.3V条件あり） / VOL(max)=0.6 V | RP2040入力閾値（2.0/0.8）と整合 |
-| 消費電流 | Icc (typ)=2 mA, (max)=10 mA | mA級 |
-| 推奨デカップリング | 0.1µF（推奨回路） | 受信側は特に不安定化しやすい |
-| 一次ソース | Everlight datasheet | URLは次項 |
+| 分類 | パラメータ | MIN | TYP | MAX | 単位 | 設計での意味（チェック観点） |
+|---|---:|---:|---:|---:|---|---|
+| 推奨動作 | Vcc（Supply Voltage） | 3.0 | - | 5.50 | V | [cite_start]3.3V動作OK（Min 3.0V）[cite: 1349]。 |
+| 出力（TTL） | VOH（High出力） | Vcc-0.4 | - | - | V | [cite_start]Vcc=3.3V時、Min **2.9V** 。RP2040 VIH(2.0V)に対しマージンあり。 |
+| 出力（TTL） | VOL（Low出力） | - | 0.4 | 0.5 | V | [cite_start]Max **0.5V** 。RP2040 VIL(0.8V)に対しマージンあり。 |
+| 消費（電源） | Icc（Dissipation current） | - | 2.0 | 4.0 | mA | [cite_start]Max **4.0mA** 。Tx(10mA)と合わせてもPicoの供給能力内。 |
+| **絶対最大** | Vcc | -0.5 | - | **5.5** | V | [cite_start]**Vcc > 5.5V で破損リスク** 。Tx(7V)より耐圧が低い点に注意。 |
+| **絶対最大** | Vout | - | - | Vcc+0.3 | V | [cite_start]**Vout > Vcc+0.3V で破損リスク** 。出力ピンへの過電圧印加禁止。 |
+| 推奨回路 | バイパスコンデンサ | 0.1 | - | - | µF | [cite_start]**必須**。部品近傍（**7mm以内**）に配置 。 |
+| 注意事項 | 半田付け温度 | - | - | 260 | °C | [cite_start]260°C以下、**10秒以内** 。 |
 
 - データシート: https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5335/PLR237-T10BK_Rev1_3-30-21.pdf
 
