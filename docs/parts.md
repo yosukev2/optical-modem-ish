@@ -29,6 +29,7 @@
 - 絶対最大（Digital IO）: **VPIN <= IOVDD + 0.5V**（= 3.3 + 0.5 = 3.8V 目安）  
   → 3.3V系以外（5V等）を直結しない
 - 出典: RP2040 datasheet（Absolute Max / IO Electrical Characteristics）
+- データシート: https://pip-assets.raspberrypi.com/categories/814-rp2040/documents/RP-008371-DS-1-rp2040-datasheet.pdf?disposition=inline
 
 ### 2.2 PLT133（Tx入力）← RP2040 GPIO 出力の整合
 - PLT133 入力条件: **Vih(min)=2.0V, Vil(max)=0.8V**
@@ -52,7 +53,7 @@
 | 推奨動作 | Vcc（Supply Voltage） | 2.7 | 3.0 | 5.50 | V | 3.3V系で動作可。電源リップル/瞬断を含めて **2.7–5.5V** に収める。 |
 | 入力（TTL） | Vih（High判定） | 2.0 | - | - | V | 駆動元GPIOのHighが2.0V以上であること（3.3V GPIOならOK）。 |
 | 入力（TTL） | Vil（Low判定） | - | - | 0.8 | V | 駆動元GPIOのLowが0.8V以下であること（0VならOK）。 |
-| 消費（電源） | Icc（Dissipation current） | 3 | 5.5* | 10 | mA | 電源容量・発熱の見積りは **MAX(10mA)** を使う。*TYPはSelection Guideの代表値。 |
+| 消費（電源） | Icc（Dissipation current） | - | 2.0 | 4.0 | mA | Max **4.0mA**。Tx(Max 10mA)と合わせても合計は**mA級（~14mA）**。W2は3V3(OUT)給電の暫定構成であり、大負荷は禁止。目安としてPico datasheetでは3V3ピン外部負荷は**300mA未満推奨**（断定せず“推奨”として扱う）。 |
 | 絶対最大 | Vcc | -0.5 | - | 7 | V | **Vcc > 7V は破損リスク**。電源過渡（挿抜/スパイク）も含めて踏まない。 |
 | 絶対最大 | Vin（DC input） | -0.5 | - | Vcc+0.5 | V | **Vin > Vcc+0.5V は破損リスク**（Vcc OFF中のGPIO Highなどで起きる）。**Vin < -0.5V も破損リスク**。 |
 | 推奨回路 | デカップリング | 0.1 | - | - | µF | **最低0.1µF** をVcc–GND間に実装。部品近傍（目安：**7mm以内**）に置いて電源ループを最小化。 |
