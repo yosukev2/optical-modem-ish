@@ -88,4 +88,4 @@ gh pr create --repo "$REPO" --base main --head "$BRANCH" --title "$TITLE" --body
 "BRANCH:    $BRANCH"
 "SHA:       $(git rev-parse HEAD)"
 "PR:        $(gh pr view --repo "$REPO" --json url -q .url)"
-```
+
