@@ -53,3 +53,30 @@ dkms.conf
 
 # debug information files
 *.dwo
+# ===== KiCad: user/local state (do NOT commit) =====
+*.kicad_prl
+*.kicad_pro-bak
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.kicad_sym-bak
+
+# Backups / autosave / locks
+*-backups/
+_autosave-*
+*.lck
+
+# KiCad cache
+fp-info-cache
+
+# ===== Outputs (generated artifacts) =====
+out/
+
+# ===== OS / editor noise =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+# Generated outputs (do NOT commit)
+out/
+hw/out/
