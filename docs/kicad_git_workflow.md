@@ -10,12 +10,10 @@
 推奨構成（例）：
 
 hw/
-<proj>.kicad_pro
-step00_top.kicad_sch
+hw.kicad_pro
+hw.kicad_sch
 step01_power.kicad_sch
-step02_io_.kicad_sch
-step03_.kicad_sch
-(必要になったら) <proj>.kicad_pcb
+(必要になったら) hw.kicad_pcb
 (必要になったら) sym-lib-table
 (必要になったら) fp-lib-table
 lib/ # 外部ライブラリは必要時のみ（追加は別Issue）
@@ -52,7 +50,7 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
 ### 3.1 分割方針（Step01〜）
 原則：回路図はStep単位のファイルに分割し、変更範囲を小さくする。
 
-- `step00_top.kicad_sch`：最上位（俯瞰と階層シートの接続点）
+- `hw.kicad_sch`：Step00（最上位／俯瞰と階層シートの接続点）
 - `step01_power.kicad_sch`：電源（W3でこのファイルを作る方針）
 - `step02_*`：I/OやTOSLINK周辺
 - `step03_*`：MCU周り
@@ -68,12 +66,12 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
   - 基板ファイルは担当者固定、または順番制（同時編集禁止）
 
 ### 3.3 Step00への統合ルール（参照の追加）
-- Step01〜を作っただけではStep00に自動反映されないため、**統合は `step00_top.kicad_sch` に階層シート参照を追加して行う**
-- `step00_top.kicad_sch` は統合点なので、**同時編集禁止**（衝突回避）
+- Step01〜を作っただけではStep00に自動反映されないため、**統合は `hw.kicad_sch` に階層シート参照を追加して行う**
+- `hw.kicad_sch` は統合点なので、**同時編集禁止**（衝突回避）
 
 **推奨運用（統合PR方式）**
-- 各Step作成PR（例：`step01_power.kicad_sch` 追加/更新）では **`step00_top.kicad_sch` を触らない**
-- Stepが揃ったタイミングで、最後に **「統合PR」** を作り、`step00_top.kicad_sch` に **参照（階層シート）をまとめて追加**する
+- 各Step作成PR（例：`step01_power.kicad_sch` 追加/更新）では **`hw.kicad_sch` を触らない**
+- Stepが揃ったタイミングで、最後に **「統合PR」** を作り、`hw.kicad_sch` に **参照（階層シート）をまとめて追加**する
 
 注意：
 - ここでの「統合」は **KiCadでの参照追加**であり、**KiCad上でファイル同士を“マージ”する操作はしない**
@@ -100,7 +98,7 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
 - 1つのPRでは基本1つのStepファイル（例：step01_power）だけを変更する
 - PRが承認されたらGitHub上でマージして積み上げる
   - KiCad上で“マージ”操作はしない
-- まとめて最後に統合する運用ではなく、順次マージで前進する
+- Stepファイル（step01/step02…）は順次マージで前進し、Step00（hw.kicad_sch）への参照追加は「統合PR」でまとめて行う
 
 ### 5.2 PRに必ず添付する“証跡”（Evidence）
 GUI編集のため、差分だけだとレビューが難しい。  
