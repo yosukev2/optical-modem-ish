@@ -1,68 +1,116 @@
 # Bring-up Procedure
 
 ## 目的
-基板（電源→クロック→I/O→Tx→Rx→リンク）を **安全に・再現可能に**立ち上げる手順を、写真/測定値つきで残す。
+最低構成で「電気→光→電気」が成立した証拠（波形/写真/条件）と、初見でも30分で再現できる手順を残す（W3以降の設計判断を安定させる）。
 
 ---
 
 ## 0. 事前準備（共通）
-- 必要機材：
-  - マルチメータ
-  - （任意）ロジアナ / オシロ
-- 事前確認：
-  - 部品の向き（Tx/Rx、レギュレータ、Picoヘッダ）
-  - はんだブリッジ / ショート有無
+### 0.1 必要機材
+- マルチメータ（必須）
+- ロジアナ（推奨。PulseView / Saleae Logic 等）
+- PC（Thonny）
+
+### 0.2 事前確認
+- 部品の向き（Tx/Rx、TOSLINKの向き、ファイバの向き）
+- ジャンパ線の刺さり（ブレッドボードが原因で接触不良が起きやすい）
+- GND共有が取れていること（最優先）
 
 ---
 
-## Phase 1: Power（電源）
-### 1.1 通電前チェック
-- [ ] 3.3V-GND 抵抗測定（短絡チェック）
-- [ ] 5V-GND 抵抗測定（任意）
+## 1. 配線（最低構成）
+### 1.1 Pico ↔ Tx/Rx（必須）
+- 電源：Pico 3V3(OUT) → Tx VCC / Rx VCC（3.3Vレール扱い）
+- GND：Pico GND → Tx GND / Rx GND（共通GND）
+- 送信：Pico GP2 → Tx Vin
+- 受信：Rx Vout → Pico GP3
 
-### 1.2 通電・電圧確認
-- [ ] 5V（USB）測定：____ V
-- [ ] 3.3V（レギュレータ出力）測定：____ V
-- [ ] 消費電流（可能なら）：____ mA
-- [ ] 発熱確認（指触/サーモ）：OK/NG
+補足
+- プルダウン抵抗（例：220kΩ）は今回の構成では不要だった。入れるとGP3が常時0になり受信できない場合がある。
 
-### 1.3 証拠（写真/スクショ）
-- Photo: board_overview.jpg（予定）
-- Photo: power_testpoints.jpg（予定）
+### 1.2 記録（必須）
+- Photo: wiring_overview.jpg
+- メモ：
+  - ファイバ長：1 m
+  - プル抵抗：なし（今回）
+  - 電源：Pico 3V3(OUT)
+  - 測定点：GP2 / GP3 / 3.3V
+![wiring_overview.jpg](./img/bringup/wiring_overview.png)
+---
+
+## 2. Phase 1: Power（電源）
+### 2.1 通電前チェック（推奨）
+- [×] 3.3Vレール - GND の抵抗を測る（短絡チェック）
+- [×] 目視でショート/ブリッジがない
+
+### 2.2 通電・電圧確認（必須）
+- [×] Pico 3V3(OUT)（3.3Vレール）測定：3.3 V
+- [×] Tx VCC 測定：3.3 V
+- [×] Rx VCC 測定：3.3 V
+
+測り方（最小）
+- 黒プローブ：Pico GND
+- 赤プローブ：3.3Vレール（または Tx/Rx の VCC ピン）
 
 ---
 
-## Phase 2: Clock / MCU（MCU動作）
-- [ ] Pico書き込み（最小FW）
-- [ ] UART/USBログが出ること
+## 3. Phase 2: MCU（Pico動作）
+- [×] ThonnyでMicroPythonが実行できる（printが出る）
+- [×] 使用GPIOが衝突していない（GP2/GP3/GP26など）
 
 ---
 
-## Phase 3: I/O（GPIO）
-### 3.1 Tx_IN（電気）
-- [ ] GPIOトグル波形を測定（TP: Tx_IN）
-- expected: 0〜3.3V, freq=____
+## 4. Phase 3: GPIO（電気の成立）
+### 4.1 Tx（GP2）が出ていること
+- [×] GP2を低速でトグル/PWMできる（最初は50Hz）
 
-### 3.2 Rx_OUT（電気）
-- [ ] Rx_OUTが入力で読める（エッジカウント）
+### 4.2 Rx（GP3）が読めること
+- [×] GP3が入力として 0/1 を読み取れる
 
----
-
-## Phase 4: Optical Tx/Rx（光）
-- [ ] TOSLINKケーブル接続（Tx→Rx）
-- [ ] TxトグルがRx側で観測できる（エッジカウント/波形）
+補足
+- 受信が疑わしい場合は一度 Rx Vout を GP26(ADC) に繋いで、ON/OFFで電圧差が出るかを確認する（アナログ確認）。
 
 ---
 
-## Phase 5: Link（同期＋フレーム）
-- [ ] preamble/syncで受信ロック
-- [ ] フレーム受信＆CRC OK
-- [ ] PER計測ログが出る
+## 5. Phase 4: Optical Link（電気→光→電気の成立）
+### 5.1 FW（MicroPython / エッジカウント）
+- GP2: PWM出力
+- GP3: IRQ（RISING|FALLING）でエッジ数をカウント
 
+期待値
+- 50Hz → 100 edges/sec
+- 100Hz → 200 edges/sec
+- 200Hz → 400 edges/sec
+- 400Hz → 800 edges/sec
+- 500Hz → 1000 edges/sec
+
+### 5.2 証拠（必須）
+- ロジアナで GP2（Tx入力）と GP3（Rx出力）を同時観測し、スクショを残す
+  - D0 = GP2
+  - D1 = GP3
+
+取得推奨
+- OK例：100Hz（安定）
+- OK例：200Hz（安定）
+- 限界例：400Hz or 500Hz（マージン低下の例）
+
+
+100Hz
+![100Hz](./img/bringup/100hz.png)
+
+200Hz
+![200Hz](./img/bringup/200hz.png)
+
+400Hz
+![400Hz](./img/bringup/400hz.png)
+
+500Hz
+![500Hz](./img/bringup/500hz.png)
 ---
 
-## よくある失敗と切り分け
-- 症状：Rxが安定しない
-  - 対策：GND/配線/プル抵抗/ノイズ源の切り分け
-- 症状：電源が落ちる
-  - 対策：ショート/レギュレータ/USB電源
+## 6. よくある失敗（NG集 / チェックリスト）
+- 向き違い（Tx/Rx、ファイバ方向）
+- GND共有が取れていない
+- ブレッドボード接触不良（刺さりが浅い/同一列ミス）
+- プルダウン抵抗で受信が潰れる（今回：220kΩでGP3が常時0になる）
+- Tx側の配線不良（GP2→Tx Vin が外れている/刺さっていない）
