@@ -7,12 +7,10 @@
 ## 1. リポジトリ構成（配置の原則）
 **原則：KiCadプロジェクトは `hw/` 配下に置く。規約は `docs/` に集約する。**
 
-推奨構成（例）：
-
 hw/
 hw.kicad_pro
 hw.kicad_sch
-step01_power.kicad_sch
+step01_power.kicad_sch # W3作成予定
 (必要になったら) hw.kicad_pcb
 (必要になったら) sym-lib-table
 (必要になったら) fp-lib-table
