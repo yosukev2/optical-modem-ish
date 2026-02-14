@@ -9,8 +9,8 @@
 
 hw/
 hw.kicad_pro
-hw.kicad_sch
-step01_power.kicad_sch # W3作成予定
+hw.kicad_sch # Step00（正本）
+step01_power.kicad_sch # Step01以降
 (必要になったら) hw.kicad_pcb
 (必要になったら) sym-lib-table
 (必要になったら) fp-lib-table
@@ -41,6 +41,7 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
 - `_autosave-*`（自動保存）
 - `*.lck`（ロックファイル）
 - `out/`（生成物置き場）
+- `hw/out/`（`hw/` 配下の生成物置き場）
 
 ---
 
@@ -48,14 +49,15 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
 ### 3.1 分割方針（Step01〜）
 原則：回路図はStep単位のファイルに分割し、変更範囲を小さくする。
 
-- `hw.kicad_sch`：Step00（最上位／俯瞰と階層シートの接続点）
-- `step01_power.kicad_sch`：電源（W3でこのファイルを作る方針）
-- `step02_*`：I/OやTOSLINK周辺
-- `step03_*`：MCU周り
+- `hw/hw.kicad_sch`：Step00（最上位／俯瞰と階層シートの接続点）
+- `hw/step01_power.kicad_sch`：電源（W3でこのファイルを作る方針）
+- `hw/step02_*`：I/OやTOSLINK周辺
+- `hw/step03_*`：MCU周り
 - 以降、必要に応じて `stepNN_*` を追加
 
 命名規則：
-- `stepNN_<short>.kicad_sch`（NN=01,02... / shortは小文字スネーク）
+- `hw/stepNN_<short>.kicad_sch`（NN=01,02... / shortは小文字スネーク）
+- CIでは `^hw/step[0-9][0-9]_[^/]+\.kicad_sch$` を強制する（`hw/hw.kicad_sch` はStep00として別扱い）
 - 一度決めたファイル名は原則変更しない（差分追跡コストを上げるため）
 
 ### 3.2 同時編集しないルール（コンフリクト回避の最重要）
@@ -64,12 +66,13 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
   - 基板ファイルは担当者固定、または順番制（同時編集禁止）
 
 ### 3.3 Step00への統合ルール（参照の追加）
-- Step01〜を作っただけではStep00に自動反映されないため、**統合は `hw.kicad_sch` に階層シート参照を追加して行う**
-- `hw.kicad_sch` は統合点なので、**同時編集禁止**（衝突回避）
+- Step01〜を作っただけではStep00に自動反映されないため、**統合は `hw/hw.kicad_sch` に階層シート参照を追加して行う**
+- `hw/hw.kicad_sch` は統合点なので、**同時編集禁止**（衝突回避）
 
 **推奨運用（統合PR方式）**
-- 各Step作成PR（例：`step01_power.kicad_sch` 追加/更新）では **`hw.kicad_sch` を触らない**
-- Stepが揃ったタイミングで、最後に **「統合PR」** を作り、`hw.kicad_sch` に **参照（階層シート）をまとめて追加**する
+- 各Step作成PR（例：`hw/step01_power.kicad_sch` 追加/更新）では **`hw/hw.kicad_sch` を触らない**
+- Stepが揃ったタイミングで、最後に **「統合PR」** を作り、`hw/hw.kicad_sch` に **参照（階層シート）をまとめて追加**する
+- 統合PRの判定は **PRラベル `integration-pr` が付いているかどうかのみ** で行う
 
 注意：
 - ここでの「統合」は **KiCadでの参照追加**であり、**KiCad上でファイル同士を“マージ”する操作はしない**
@@ -96,9 +99,24 @@ KiCadはGUI編集だが、主要成果物はテキストファイルでありGit
 - 1つのPRでは基本1つのStepファイル（例：step01_power）だけを変更する
 - PRが承認されたらGitHub上でマージして積み上げる
   - KiCad上で“マージ”操作はしない
-- Stepファイル（step01/step02…）は順次マージで前進し、Step00（hw.kicad_sch）への参照追加は「統合PR」でまとめて行う
+- Stepファイル（step01/step02…）は順次マージで前進し、Step00（`hw/hw.kicad_sch`）への参照追加は「統合PR」でまとめて行う
 
-### 5.2 PRに必ず添付する“証跡”（Evidence）
+### 5.2 PRガードレールCI（差分ベース）
+PRでは `git diff --name-status <base> <head>` の差分だけを対象に、次を強制する。
+
+- 禁止ファイル/パスを含む差分はFAIL
+  - `*.kicad_prl`
+  - `*/<something>-backups/*`
+  - `_autosave-*` を含むファイル名
+  - `*.lck`
+  - `out/` 配下
+  - `hw/out/` 配下
+- 追加（`A`）・改名（`R*`）された `hw/` 配下の `.kicad_sch`（`hw/hw.kicad_sch` を除く）は
+  `^hw/step[0-9][0-9]_[^/]+\.kicad_sch$` に一致しない場合FAIL
+- `hw/hw.kicad_sch` が差分に含まれるPRは、ラベル `integration-pr` が無ければFAIL
+  - `integration-pr` がある統合PRのみ、Step00変更を許可
+
+### 5.3 PRに必ず添付する“証跡”（Evidence）
 GUI編集のため、差分だけだとレビューが難しい。  
 そのため、PRには最低限の証跡を添付してレビュー可能性を上げる。
 
@@ -139,8 +157,9 @@ GUI編集のため、差分だけだとレビューが難しい。
 
 ## 8. 最小チェックリスト（運用の守り）
 - [ ] KiCadプロジェクトは `hw/` 配下にある
-- [ ] `*.kicad_prl` / `*-backups/` / `_autosave-*` / `out/` はGitに入れない
-- [ ] 回路図は `stepNN_*` で分割し、同一ファイルの同時編集をしない
+- [ ] `*.kicad_prl` / `*-backups/` / `_autosave-*` / `*.lck` / `out/` / `hw/out/` はGitに入れない
+- [ ] Step00正本は `hw/hw.kicad_sch` とし、通常PRでは触らない（統合PR + `integration-pr` ラベル時のみ許可）
+- [ ] 回路図（Step01以降）は `^hw/step[0-9][0-9]_[^/]+\.kicad_sch$` の命名規約を守る
 - [ ] PRは基本 1PR=1Step で小さく積み上げる
 - [ ] PRに回路図PDF（またはスクショ）とERC/DRC結果を添付する
 - [ ] 外部ライブラリ追加は必ずIssueを分け、理由/出典/版を残す
