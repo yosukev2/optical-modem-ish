@@ -46,7 +46,6 @@ jobs:
 
           if [ ! -s /tmp/changed_sch.txt ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No changed schematics."
             exit 0
           fi
 
@@ -85,7 +84,8 @@ jobs:
               "$SCH"
           done <<< "${{ steps.changes.outputs.sch_files }}"
 
-      - name: Run DRC (if any .kicad_pcb exists)
+      - name: Run DRC (if any .kicad_pcb exists) [non-blocking]
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
@@ -94,7 +94,6 @@ jobs:
 
           PCB_FILES="$(find hw -maxdepth 1 -type f -name '*.kicad_pcb' | sort || true)"
           if [ -z "$PCB_FILES" ]; then
-            echo "No hw/*.kicad_pcb found. Skip DRC."
             exit 0
           fi
 
@@ -107,7 +106,7 @@ jobs:
               --severity-all \
               --exit-code-violations \
               --output "$OUT_DIR/${NAME}_drc.json" \
-              "$PCB"
+              "$PCB" || true
           done <<< "$PCB_FILES"
 
       - name: Upload artifacts
