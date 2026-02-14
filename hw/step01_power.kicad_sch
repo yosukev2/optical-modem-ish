@@ -1667,6 +1667,12 @@
 		(uuid "eb1dda2e-ca85-4920-a2af-b483ca4760cf")
 	)
 	(junction
+		(at 184.15 133.35)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ec60403b-35bb-4995-a63a-6b2a28d6d609")
+	)
+	(junction
 		(at 118.11 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1738,6 +1744,16 @@
 	)
 	(wire
 		(pts
+			(xy 184.15 133.35) (xy 204.47 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1356ea38-959c-4eea-af20-122c49841d5c")
+	)
+	(wire
+		(pts
 			(xy 204.47 133.35) (xy 219.71 133.35)
 		)
 		(stroke
@@ -1758,7 +1774,7 @@
 	)
 	(wire
 		(pts
-			(xy 158.75 133.35) (xy 204.47 133.35)
+			(xy 158.75 133.35) (xy 184.15 133.35)
 		)
 		(stroke
 			(width 0)
@@ -1985,6 +2001,16 @@
 			(type default)
 		)
 		(uuid "a70076a2-b92b-4188-8943-1aba9234f0aa")
+	)
+	(wire
+		(pts
+			(xy 184.15 86.36) (xy 184.15 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b12c2e30-54d2-42f7-8446-da25f1e0f62c")
 	)
 	(wire
 		(pts
@@ -2606,7 +2632,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6065b20a-9c70-4304-9531-473b1a363859")
-		(property "Reference" "C_OUT"
+		(property "Reference" "C_OUT1"
 			(at 208.28 100.3299 0)
 			(effects
 				(font
@@ -2660,7 +2686,7 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
-					(reference "C_OUT")
+					(reference "C_OUT1")
 					(unit 1)
 				)
 			)
@@ -3013,7 +3039,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b5c5c0ad-d8a0-4ed2-b30f-322d455ae470")
-		(property "Reference" "C_OUT"
+		(property "Reference" "C_OUT2"
 			(at 223.52 100.3299 0)
 			(effects
 				(font
@@ -3067,7 +3093,7 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
-					(reference "C_OUT")
+					(reference "C_OUT2")
 					(unit 1)
 				)
 			)
@@ -3083,7 +3109,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c7290bcd-b39e-472d-9c3a-bc2b0a4d0dea")
-		(property "Reference" "C_IN"
+		(property "Reference" "C_IN1"
 			(at 152.4 97.7899 0)
 			(effects
 				(font
@@ -3137,7 +3163,7 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
-					(reference "C_IN")
+					(reference "C_IN1")
 					(unit 1)
 				)
 			)
@@ -3220,7 +3246,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e3965751-8011-4d9b-89aa-be72fc7bb4f7")
-		(property "Reference" "C_IN"
+		(property "Reference" "C_IN2"
 			(at 162.56 97.7899 0)
 			(effects
 				(font
@@ -3274,7 +3300,7 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
-					(reference "C_IN")
+					(reference "C_IN2")
 					(unit 1)
 				)
 			)
