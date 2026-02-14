@@ -4,6 +4,9 @@
 	(generator_version "9.0")
 	(uuid "7b66d93d-d6d0-4bd4-83b3-6fc711e21073")
 	(paper "A4")
+	(title_block
+		(comment 1 "CI test: touch")
+	)
 	(lib_symbols
 		(symbol "Connector:TestPoint"
 			(pin_numbers
