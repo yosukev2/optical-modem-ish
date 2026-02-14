@@ -155,7 +155,58 @@ GUI編集のため、差分だけだとレビューが難しい。
 
 ---
 
-## 8. 最小チェックリスト（運用の守り）
+## 8. PR前の最小手順（ローカル証跡生成）
+
+PRを出す前に、ローカルで証跡（PDF/ERC/DRC）を生成して内容を確認する。
+生成した証跡はActionsのArtifactsと照合可能。
+
+### 8.1 前提条件
+- KiCad 8.0以降がインストールされていること
+- `kicad-cli` にPATHが通っていること（コマンドプロンプトで `kicad-cli version` が実行できる）
+
+### 8.2 1コマンド実行（PowerShell）
+
+```powershell
+# リポジトリルートで実行
+.\scripts\kicad\gen_evidence.ps1 -ProjectPath "hw/hw.kicad_pro"
+```
+
+### 8.3 生成されるファイル
+
+出力先: `hw/out/`
+
+| ファイル | 内容 |
+|---------|------|
+| `{名前}.pdf` | 回路図PDF |
+| `{名前}_erc_all.json` | ERC結果（全severity） |
+| `{名前}_erc_error.json` | ERC結果（エラーのみ、gating用） |
+| `{名前}_drc.json` | DRC結果（pcbがある場合のみ） |
+
+例: `hw/hw.kicad_sch` の場合 → `hw/out/hw.pdf`, `hw/out/hw_erc_all.json`, `hw/out/hw_erc_error.json`
+
+### 8.4 hw/out/ はコミットしない
+
+`hw/out/` は `.gitignore` で除外済み。生成後に `git status` で表示されないことを確認する。
+
+```powershell
+git status
+# hw/out/ が表示されなければOK
+```
+
+### 8.5 Actions Artifactsとの照合チェック
+
+PRをpushすると、GitHub ActionsがArtifacts (`kicad-pr-{PR番号}`) を生成する。
+ローカル生成物とActionsの出力が整合していることを以下で確認できる：
+
+- [ ] **ファイル名が一致**: ローカルの `hw/out/{名前}.pdf` と Artifacts の `{名前}.pdf` が同じ命名規則
+- [ ] **ERC結果の整合**: ローカルでPASSならActionsでもPASS（エラーがあればActionsも失敗する）
+- [ ] **DRC結果の整合**: pcbがある場合、ローカルとActionsで同じ `{名前}_drc.json` が生成される
+
+注意: ActionsではPNG（`pdftoppm`）も生成されるが、ローカルでは省略している（PDF確認で十分）。
+
+---
+
+## 9. 最小チェックリスト（運用の守り）
 - [ ] KiCadプロジェクトは `hw/` 配下にある
 - [ ] `*.kicad_prl` / `*-backups/` / `_autosave-*` / `*.lck` / `out/` / `hw/out/` はGitに入れない
 - [ ] Step00正本は `hw/hw.kicad_sch` とし、通常PRでは触らない（統合PR + `integration-pr` ラベル時のみ許可）
