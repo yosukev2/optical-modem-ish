@@ -18,9 +18,13 @@ jobs:
       image: kicad/kicad:9.0.7
       options: --user root
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}
+
     steps:
       - name: Install system deps
-        shell: bash
         run: |
           set -euo pipefail
           apt-get update
@@ -35,14 +39,27 @@ jobs:
 
       - name: Detect changed schematics
         id: changes
-        shell: bash
         run: |
           set -euo pipefail
+
+          pwd
+          ls -la
+          test -d .git
+
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "BASE_SHA=$BASE_SHA"
+          echo "HEAD_SHA=$HEAD_SHA"
 
-          git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'hw/*.kicad_sch' > /tmp/changed_sch.txt || true
+          git rev-parse --is-inside-work-tree
+
+          git fetch --no-tags --prune --depth=1 origin "$BASE_SHA" "$HEAD_SHA"
+
+          git diff --name-only "$BASE_SHA...$HEAD_SHA" -- 'hw/*.kicad_sch' 'hw/**/*.kicad_sch' > /tmp/changed_sch.txt
           sed -i '/^\s*$/d' /tmp/changed_sch.txt || true
+
+          echo "Changed schematics:"
+          cat /tmp/changed_sch.txt || true
 
           if [ ! -s /tmp/changed_sch.txt ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -56,7 +73,6 @@ jobs:
 
       - name: Export PDF + run ERC (per changed schematic)
         if: steps.changes.outputs.changed == 'true'
-        shell: bash
         run: |
           set -euo pipefail
           OUT_DIR="hw/out"
@@ -86,7 +102,6 @@ jobs:
 
       - name: Run DRC (if any .kicad_pcb exists) [non-blocking]
         continue-on-error: true
-        shell: bash
         run: |
           set -euo pipefail
           OUT_DIR="hw/out"
@@ -94,6 +109,7 @@ jobs:
 
           PCB_FILES="$(find hw -maxdepth 1 -type f -name '*.kicad_pcb' | sort || true)"
           if [ -z "$PCB_FILES" ]; then
+            echo "No hw/*.kicad_pcb found. Skip DRC."
             exit 0
           fi
 
@@ -115,4 +131,5 @@ jobs:
         with:
           name: kicad-pr-${{ github.event.pull_request.number }}
           path: hw/out/**
+          if-no-files-found: warn
           retention-days: 14
