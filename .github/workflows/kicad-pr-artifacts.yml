@@ -37,29 +37,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Mark workspace as safe for git
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$(pwd)"
+
       - name: Detect changed schematics
         id: changes
         run: |
           set -euo pipefail
-
-          pwd
-          ls -la
-          test -d .git
-
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          echo "BASE_SHA=$BASE_SHA"
-          echo "HEAD_SHA=$HEAD_SHA"
-
-          git rev-parse --is-inside-work-tree
-
           git fetch --no-tags --prune --depth=1 origin "$BASE_SHA" "$HEAD_SHA"
 
           git diff --name-only "$BASE_SHA...$HEAD_SHA" -- 'hw/*.kicad_sch' 'hw/**/*.kicad_sch' > /tmp/changed_sch.txt
           sed -i '/^\s*$/d' /tmp/changed_sch.txt || true
-
-          echo "Changed schematics:"
-          cat /tmp/changed_sch.txt || true
 
           if [ ! -s /tmp/changed_sch.txt ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -109,7 +102,6 @@ jobs:
 
           PCB_FILES="$(find hw -maxdepth 1 -type f -name '*.kicad_pcb' | sort || true)"
           if [ -z "$PCB_FILES" ]; then
-            echo "No hw/*.kicad_pcb found. Skip DRC."
             exit 0
           fi
 
