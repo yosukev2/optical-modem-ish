@@ -1,0 +1,124 @@
+name: KiCad PR artifacts (pdf/erc/drc)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "hw/**"
+      - ".github/workflows/kicad-pr-artifacts.yml"
+
+concurrency:
+  group: kicad-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  kicad:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          sudo snap install kicad --classic
+          kicad-cli version || true
+
+      - name: Detect changed schematics
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'hw/*.kicad_sch' > /tmp/changed_sch.txt || true
+          sed -i '/^\s*$/d' /tmp/changed_sch.txt || true
+
+          if [ ! -s /tmp/changed_sch.txt ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changed schematics."
+            exit 0
+          fi
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "sch_files<<EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/changed_sch.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Export PDF + run ERC (per changed schematic)
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT_DIR="hw/out"
+          mkdir -p "$OUT_DIR"
+
+          {
+            echo "runner=$(uname -a)"
+            echo "kicad_cli=$(kicad-cli version 2>/dev/null || true)"
+            echo "base_sha=${{ github.event.pull_request.base.sha }}"
+            echo "head_sha=${{ github.event.pull_request.head.sha }}"
+          } > "$OUT_DIR/meta.txt"
+
+          while IFS= read -r SCH; do
+            [ -n "$SCH" ] || continue
+            NAME="$(basename "$SCH" .kicad_sch)"
+
+            # PDF (固定命名: step01_power.pdf 等)
+            kicad-cli sch export pdf --output "$OUT_DIR/${NAME}.pdf" "$SCH"
+
+            # レンダ画像（PDF 1ページ目を PNG化）
+            pdftoppm -png -f 1 -singlefile "$OUT_DIR/${NAME}.pdf" "$OUT_DIR/${NAME}"
+
+            # ERC（JSON, 固定命名: step01_power_erc.json 等）
+            # 违反があれば exit code 5 で FAIL させる
+            kicad-cli sch erc \
+              --format json \
+              --severity-all \
+              --exit-code-violations \
+              --output "$OUT_DIR/${NAME}_erc.json" \
+              "$SCH"
+
+          done <<< "${{ steps.changes.outputs.sch_files }}"
+
+      - name: Run DRC (if any .kicad_pcb exists)
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT_DIR="hw/out"
+          mkdir -p "$OUT_DIR"
+
+          PCB_FILES="$(find hw -maxdepth 1 -type f -name '*.kicad_pcb' | sort || true)"
+          if [ -z "$PCB_FILES" ]; then
+            echo "No hw/*.kicad_pcb found. Skip DRC."
+            exit 0
+          fi
+
+          while IFS= read -r PCB; do
+            [ -n "$PCB" ] || continue
+            NAME="$(basename "$PCB" .kicad_pcb)"
+
+            # DRC（JSON, 固定命名: <proj>_drc.json 等）
+            # 违反があれば exit code 5 で FAIL させる
+            kicad-cli pcb drc \
+              --format json \
+              --severity-all \
+              --exit-code-violations \
+              --output "$OUT_DIR/${NAME}_drc.json" \
+              "$PCB"
+          done <<< "$PCB_FILES"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kicad-pr-${{ github.event.pull_request.number }}
+          path: hw/out/**
+          retention-days: 14
