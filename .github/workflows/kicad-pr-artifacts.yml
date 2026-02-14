@@ -49,9 +49,12 @@ jobs:
           set -euo pipefail
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          git fetch --no-tags --prune --depth=1 origin "$BASE_SHA" "$HEAD_SHA"
 
-          git diff --name-only "$BASE_SHA...$HEAD_SHA" -- 'hw/*.kicad_sch' 'hw/**/*.kicad_sch' > /tmp/changed_sch.txt
+          # shallowにしない（merge-base問題を回避）
+          git fetch --no-tags --prune origin "$BASE_SHA" "$HEAD_SHA"
+
+          # merge-base不要の比較（BASE..HEAD）
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'hw/**/*.kicad_sch' > /tmp/changed_sch.txt
           sed -i '/^\s*$/d' /tmp/changed_sch.txt || true
 
           if [ ! -s /tmp/changed_sch.txt ]; then
@@ -63,6 +66,7 @@ jobs:
           echo "sch_files<<EOF" >> "$GITHUB_OUTPUT"
           cat /tmp/changed_sch.txt >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
+
 
       - name: Export PDF + run ERC (per changed schematic)
         if: steps.changes.outputs.changed == 'true'
