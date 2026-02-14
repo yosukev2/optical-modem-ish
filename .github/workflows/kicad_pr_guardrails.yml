@@ -23,4 +23,4 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
         run: |
-          scripts/ci/kicad_pr_guard.sh "$BASE_SHA" "$HEAD_SHA"
+          bash scripts/ci/kicad_pr_guard.sh "$BASE_SHA" "$HEAD_SHA"
