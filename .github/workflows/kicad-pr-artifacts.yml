@@ -14,21 +14,24 @@ concurrency:
 jobs:
   kicad:
     runs-on: ubuntu-latest
+    container:
+      image: kicad/kicad:9.0.7
+      options: --user root
 
     steps:
+      - name: Install system deps
+        shell: bash
+        run: |
+          set -euo pipefail
+          apt-get update
+          apt-get install -y git ca-certificates poppler-utils
+          git --version
+          kicad-cli version
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Install dependencies
-        shell: bash
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y poppler-utils
-          sudo snap install kicad --classic
-          kicad-cli version || true
 
       - name: Detect changed schematics
         id: changes
@@ -71,21 +74,15 @@ jobs:
             [ -n "$SCH" ] || continue
             NAME="$(basename "$SCH" .kicad_sch)"
 
-            # PDF (固定命名: step01_power.pdf 等)
             kicad-cli sch export pdf --output "$OUT_DIR/${NAME}.pdf" "$SCH"
-
-            # レンダ画像（PDF 1ページ目を PNG化）
             pdftoppm -png -f 1 -singlefile "$OUT_DIR/${NAME}.pdf" "$OUT_DIR/${NAME}"
 
-            # ERC（JSON, 固定命名: step01_power_erc.json 等）
-            # 违反があれば exit code 5 で FAIL させる
             kicad-cli sch erc \
               --format json \
               --severity-all \
               --exit-code-violations \
               --output "$OUT_DIR/${NAME}_erc.json" \
               "$SCH"
-
           done <<< "${{ steps.changes.outputs.sch_files }}"
 
       - name: Run DRC (if any .kicad_pcb exists)
@@ -105,8 +102,6 @@ jobs:
             [ -n "$PCB" ] || continue
             NAME="$(basename "$PCB" .kicad_pcb)"
 
-            # DRC（JSON, 固定命名: <proj>_drc.json 等）
-            # 违反があれば exit code 5 で FAIL させる
             kicad-cli pcb drc \
               --format json \
               --severity-all \
