@@ -35,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Mark workspace as safe for git
         run: |
@@ -43,33 +43,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$(pwd)"
 
-      - name: Detect changed schematics
-        id: changes
-        run: |
-          set -euo pipefail
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-
-          # shallowにしない（merge-base問題を回避）
-          git fetch --no-tags --prune origin "$BASE_SHA" "$HEAD_SHA"
-
-          # merge-base不要の比較（BASE..HEAD）
-          git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'hw/**/*.kicad_sch' > /tmp/changed_sch.txt
-          sed -i '/^\s*$/d' /tmp/changed_sch.txt || true
-
-          if [ ! -s /tmp/changed_sch.txt ]; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "sch_files<<EOF" >> "$GITHUB_OUTPUT"
-          cat /tmp/changed_sch.txt >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-
-      - name: Export PDF + run ERC (per changed schematic)
-        if: steps.changes.outputs.changed == 'true'
+      - name: Export PDF + run ERC (all schematics)
         run: |
           set -euo pipefail
           OUT_DIR="hw/out"
@@ -78,9 +52,16 @@ jobs:
           {
             echo "runner=$(uname -a)"
             echo "kicad_cli=$(kicad-cli version 2>/dev/null || true)"
+            echo "pr=${{ github.event.pull_request.number }}"
             echo "base_sha=${{ github.event.pull_request.base.sha }}"
             echo "head_sha=${{ github.event.pull_request.head.sha }}"
           } > "$OUT_DIR/meta.txt"
+
+          SCH_FILES="$(ls -1 hw/*.kicad_sch 2>/dev/null | sort || true)"
+          if [ -z "$SCH_FILES" ]; then
+            echo "No hw/*.kicad_sch found"
+            exit 0
+          fi
 
           while IFS= read -r SCH; do
             [ -n "$SCH" ] || continue
@@ -95,7 +76,7 @@ jobs:
               --exit-code-violations \
               --output "$OUT_DIR/${NAME}_erc.json" \
               "$SCH"
-          done <<< "${{ steps.changes.outputs.sch_files }}"
+          done <<< "$SCH_FILES"
 
       - name: Run DRC (if any .kicad_pcb exists) [non-blocking]
         continue-on-error: true
