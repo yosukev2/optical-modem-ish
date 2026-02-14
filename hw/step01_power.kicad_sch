@@ -703,155 +703,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:Polyfuse"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "F"
-				(at -2.54 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Polyfuse"
-				(at 2.54 0 90)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 1.27 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Resettable fuse, polymeric positive temperature coefficient"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "resettable fuse PTC PPTC polyfuse polyswitch"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "*polyfuse* *PTC*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Polyfuse_0_1"
-				(polyline
-					(pts
-						(xy -1.524 2.54) (xy -1.524 1.524) (xy 1.524 -1.524) (xy 1.524 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -0.762 2.54)
-					(end 0.762 -2.54)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "Polyfuse_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 1.27)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 1.27)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:R"
 			(pin_numbers
 				(hide yes)
@@ -1373,6 +1224,155 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "hw_symbols:Polyfuse_TBD"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "F"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Polyfuse_TBD"
+				(at 2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 1.27 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Resettable fuse, polymeric positive temperature coefficient"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "resettable fuse PTC PPTC polyfuse polyswitch"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "*polyfuse* *PTC* Fuse:*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Polyfuse_TBD_0_1"
+				(polyline
+					(pts
+						(xy -1.524 2.54) (xy -1.524 1.524) (xy 1.524 -1.524) (xy 1.524 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -0.762 2.54)
+					(end 0.762 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Polyfuse_TBD_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:GND"
 			(power)
 			(pin_numbers
@@ -1685,6 +1685,12 @@
 		(uuid "ec60403b-35bb-4995-a63a-6b2a28d6d609")
 	)
 	(junction
+		(at 81.28 133.35)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f1c544e8-0ccb-43fa-ad67-181aa2504a67")
+	)
+	(junction
 		(at 118.11 77.47)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1742,7 +1748,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 133.35) (xy 82.55 133.35)
+			(xy 73.66 133.35) (xy 81.28 133.35)
 		)
 		(stroke
 			(width 0)
@@ -1782,6 +1788,16 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 102.87) (xy 81.28 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2280826c-0922-4184-9840-07034e759ba5")
+	)
+	(wire
+		(pts
 			(xy 107.95 113.03) (xy 107.95 133.35)
 		)
 		(stroke
@@ -1799,6 +1815,16 @@
 			(type default)
 		)
 		(uuid "23e16f44-2348-48fd-8f24-5e61617c8d53")
+	)
+	(wire
+		(pts
+			(xy 81.28 133.35) (xy 82.55 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "245f6b59-0929-4bb2-bbd9-4abb4ba82642")
 	)
 	(wire
 		(pts
@@ -1909,16 +1935,6 @@
 			(type default)
 		)
 		(uuid "5d615d90-d36f-4b8f-8820-0c47c90ac305")
-	)
-	(wire
-		(pts
-			(xy 82.55 102.87) (xy 82.55 133.35)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "78bed57a-870b-48aa-bcc7-2151f7d2a6d2")
 	)
 	(wire
 		(pts
@@ -2212,16 +2228,6 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 102.87) (xy 81.28 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "eaaeace8-4abf-415c-bf42-dd9a7c24f659")
-	)
-	(wire
-		(pts
 			(xy 90.17 133.35) (xy 96.52 133.35)
 		)
 		(stroke
@@ -2279,28 +2285,6 @@
 			(justify left bottom)
 		)
 		(uuid "dc1eeb0d-f386-4034-879d-dc5fc888f1e3")
-	)
-	(global_label "+3V3"
-		(shape input)
-		(at 214.63 76.2 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "27c700aa-383c-491c-85e8-a8304f4420ee")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 221.1228 76.2 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
 	)
 	(symbol
 		(lib_id "Regulator_Linear:MCP1727-3302xMF")
@@ -2388,6 +2372,10 @@
 					(reference "U2")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "U2")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -2451,6 +2439,10 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
+					(reference "#FLG01")
+					(unit 1)
+				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
 					(reference "#FLG01")
 					(unit 1)
 				)
@@ -2524,6 +2516,10 @@
 					(reference "D1")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "D1")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -2555,7 +2551,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 94.742 109.22 90)
 			(effects
 				(font
@@ -2594,6 +2590,10 @@
 					(reference "R_CC2")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "R_CC2")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -2625,7 +2625,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 157.48 69.85 0)
 			(effects
 				(font
@@ -2661,6 +2661,10 @@
 					(reference "TP4")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "TP4")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -2690,7 +2694,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_USB:USB_C_Receptacle_HRO_TYPE-C-31-M-12"
 			(at 85.09 82.55 0)
 			(effects
 				(font
@@ -2744,6 +2748,10 @@
 					(reference "J1")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "J1")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -2775,7 +2783,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 205.4352 105.41 0)
 			(effects
 				(font
@@ -2811,6 +2819,10 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
+					(reference "C_OUT1")
+					(unit 1)
+				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
 					(reference "C_OUT1")
 					(unit 1)
 				)
@@ -2880,6 +2892,10 @@
 					(reference "#FLG03")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "#FLG03")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -2946,11 +2962,15 @@
 					(reference "#PWR01")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "#PWR01")
+					(unit 1)
+				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Device:Polyfuse")
+		(lib_id "hw_symbols:Polyfuse_TBD")
 		(at 144.78 77.47 90)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2975,7 +2995,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Fuse:Fuse_1812_4532Metric"
 			(at 149.86 76.2 0)
 			(effects
 				(font
@@ -3015,6 +3035,10 @@
 					(reference "F1")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "F1")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3046,7 +3070,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 106.172 109.22 90)
 			(effects
 				(font
@@ -3082,6 +3106,10 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
+					(reference "R_CC1")
+					(unit 1)
+				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
 					(reference "R_CC1")
 					(unit 1)
 				)
@@ -3151,6 +3179,10 @@
 					(reference "#FLG02")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "#FLG02")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3182,7 +3214,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 220.6752 105.41 0)
 			(effects
 				(font
@@ -3221,6 +3253,10 @@
 					(reference "C_OUT2")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "C_OUT2")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3252,7 +3288,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 149.5552 102.87 0)
 			(effects
 				(font
@@ -3291,6 +3327,10 @@
 					(reference "C_IN1")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "C_IN1")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3322,7 +3362,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 95.25 133.35 0)
 			(effects
 				(font
@@ -3358,6 +3398,10 @@
 					(reference "TP2")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "TP2")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3389,7 +3433,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 232.41 76.2 0)
 			(effects
 				(font
@@ -3425,6 +3469,10 @@
 					(reference "TP3")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "TP3")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3456,7 +3504,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
 			(at 159.7152 102.87 0)
 			(effects
 				(font
@@ -3495,6 +3543,10 @@
 					(reference "C_IN2")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "C_IN2")
+					(unit 1)
+				)
 			)
 		)
 	)
@@ -3526,7 +3578,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "TestPoint:TestPoint_Pad_D1.0mm"
 			(at 109.22 77.47 0)
 			(effects
 				(font
@@ -3562,13 +3614,11 @@
 					(reference "TP1")
 					(unit 1)
 				)
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073/d394618b-0e7e-457f-a476-ce5e8d3d9e88"
+					(reference "TP1")
+					(unit 1)
+				)
 			)
 		)
 	)
-	(sheet_instances
-		(path "/"
-			(page "1")
-		)
-	)
-	(embedded_fonts no)
 )
