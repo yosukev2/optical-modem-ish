@@ -155,6 +155,12 @@ GUI編集のため、差分だけだとレビューが難しい。
 
 ---
 
+## 7.1 ブランチ保護と CODEOWNERS
+main ブランチは保護される前提とする。
+統合点（`hw/hw.kicad_sch` および `*.kicad_pcb`）は CODEOWNERS により明示され、変更は必ず PR 経由で行う。
+
+---
+
 ## 8. 最小チェックリスト（運用の守り）
 - [ ] KiCadプロジェクトは `hw/` 配下にある
 - [ ] `*.kicad_prl` / `*-backups/` / `_autosave-*` / `*.lck` / `out/` / `hw/out/` はGitに入れない

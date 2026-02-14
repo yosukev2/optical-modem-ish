@@ -1,0 +1,3 @@
+# 統合点（Step00 / PCB）は保護対象
+/hw/hw.kicad_sch    @yosukev2
+/hw/*.kicad_pcb     @yosukev2
