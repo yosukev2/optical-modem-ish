@@ -52,6 +52,23 @@
 - 黒プローブ：Pico GND
 - 赤プローブ：3.3Vレール（または Tx/Rx の VCC ピン）
 
+### 2.3 電源Bring-up（テスター）
+測定手順（最小）
+- DMMをDC電圧レンジに設定
+- 黒リードを TP2（TP_GND）に当て続ける（基準点）
+- 赤リードで各TPを測る
+
+| TP（Reference/Value） | Net | 期待値（レンジ） | 判定/メモ |
+| --- | --- | --- | --- |
+| TP2（TP_GND） | GND | 0 V | 基準点。0 Vからずれる場合はGND接続を再確認 |
+| TP1（TP_VBUS） | VBUS_IN | 4.75-5.25 V | USB 5 V入力。範囲内ならOK |
+| TP4（TP_VBUS_PRO） | VBUS_PRO | 4.75-5.25 V | 保護後5 V。範囲内ならOK |
+| TP3（TP_3V3） | 3V3 | 3.23-3.37 V | 3.3 Vレール。範囲内ならOK |
+
+切り分けメモ
+- TP1がOKでTP4がNGなら、F1（Polyfuse）周り（はんだ不良/部品不良/トレース）を疑う
+- TP4がOKでTP3がNGなら、LDO（U1）周り（向き/はんだ/短絡/入出力コンデンサ）を疑う
+
 ---
 
 ## 3. Phase 2: MCU（Pico動作）
