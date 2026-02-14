@@ -18,9 +18,13 @@ jobs:
       image: kicad/kicad:9.0.7
       options: --user root
 
-    steps:
-      - name: Install system deps
+    defaults:
+      run:
         shell: bash
+        working-directory: ${{ github.workspace }}
+
+    steps:
+      - name: Install deps
         run: |
           set -euo pipefail
           apt-get update
@@ -31,32 +35,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          submodules: recursive
 
-      - name: Detect changed schematics
-        id: changes
-        shell: bash
+      - name: Mark workspace as safe for git
         run: |
           set -euo pipefail
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$(pwd)"
 
-          git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'hw/*.kicad_sch' > /tmp/changed_sch.txt || true
-          sed -i '/^\s*$/d' /tmp/changed_sch.txt || true
-
-          if [ ! -s /tmp/changed_sch.txt ]; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-          echo "sch_files<<EOF" >> "$GITHUB_OUTPUT"
-          cat /tmp/changed_sch.txt >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
-
-      - name: Export PDF + run ERC (per changed schematic)
-        if: steps.changes.outputs.changed == 'true'
-        shell: bash
+      - name: Export PDF + run ERC (all schematics)
         run: |
           set -euo pipefail
           OUT_DIR="hw/out"
@@ -65,9 +53,16 @@ jobs:
           {
             echo "runner=$(uname -a)"
             echo "kicad_cli=$(kicad-cli version 2>/dev/null || true)"
+            echo "pr=${{ github.event.pull_request.number }}"
             echo "base_sha=${{ github.event.pull_request.base.sha }}"
             echo "head_sha=${{ github.event.pull_request.head.sha }}"
           } > "$OUT_DIR/meta.txt"
+
+          SCH_FILES="$(find hw -type f -name '*.kicad_sch' | sort || true)"
+          if [ -z "$SCH_FILES" ]; then
+            echo "No schematics found under hw/"
+            exit 0
+          fi
 
           while IFS= read -r SCH; do
             [ -n "$SCH" ] || continue
@@ -76,23 +71,30 @@ jobs:
             kicad-cli sch export pdf --output "$OUT_DIR/${NAME}.pdf" "$SCH"
             pdftoppm -png -f 1 -singlefile "$OUT_DIR/${NAME}.pdf" "$OUT_DIR/${NAME}"
 
+            # 1) report everything (do not fail)
             kicad-cli sch erc \
               --format json \
               --severity-all \
+              --output "$OUT_DIR/${NAME}_erc_all.json" \
+              "$SCH" || true
+
+            # 2) gate on errors only (fail if errors exist)
+            kicad-cli sch erc \
+              --format json \
+              --severity-error \
               --exit-code-violations \
-              --output "$OUT_DIR/${NAME}_erc.json" \
+              --output "$OUT_DIR/${NAME}_erc_error.json" \
               "$SCH"
-          done <<< "${{ steps.changes.outputs.sch_files }}"
+          done <<< "$SCH_FILES"
 
       - name: Run DRC (if any .kicad_pcb exists) [non-blocking]
         continue-on-error: true
-        shell: bash
         run: |
           set -euo pipefail
           OUT_DIR="hw/out"
           mkdir -p "$OUT_DIR"
 
-          PCB_FILES="$(find hw -maxdepth 1 -type f -name '*.kicad_pcb' | sort || true)"
+          PCB_FILES="$(find hw -type f -name '*.kicad_pcb' | sort || true)"
           if [ -z "$PCB_FILES" ]; then
             exit 0
           fi
@@ -115,4 +117,5 @@ jobs:
         with:
           name: kicad-pr-${{ github.event.pull_request.number }}
           path: hw/out/**
+          if-no-files-found: warn
           retention-days: 14
