@@ -1125,20 +1125,20 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Regulator_Linear:MCP1727-0802xMF"
+		(symbol "Regulator_Linear:MCP1727-3302xMF"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at -8.89 6.35 0)
+				(at -7.62 8.89 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "MCP1727-0802xMF"
-				(at 5.08 6.35 0)
+			(property "Value" "MCP1727-3302xMF"
+				(at 11.43 8.89 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1163,7 +1163,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "1.5A, Low Voltage, Low Quiescent Current LDO Regulator, 2.3 - 6V Input, Fixed 0.8V Output, 330mV Dropout, DFN-8"
+			(property "Description" "1.5A, Low Voltage, Low Quiescent Current LDO Regulator, 2.3 - 6V Input, Fixed 3.3V Output, 330mV Dropout, DFN-8"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1190,7 +1190,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "MCP1727-0802xMF_0_0"
+			(symbol "MCP1727-3302xMF_0_0"
 				(pin input line
 					(at -12.7 -2.54 0)
 					(length 2.54)
@@ -1264,7 +1264,7 @@
 					)
 				)
 			)
-			(symbol "MCP1727-0802xMF_0_1"
+			(symbol "MCP1727-3302xMF_0_1"
 				(rectangle
 					(start -10.16 5.08)
 					(end 10.16 -5.08)
@@ -1277,7 +1277,7 @@
 					)
 				)
 			)
-			(symbol "MCP1727-0802xMF_1_1"
+			(symbol "MCP1727-3302xMF_1_1"
 				(pin power_in line
 					(at -12.7 2.54 0)
 					(length 2.54)
@@ -1625,10 +1625,22 @@
 		(uuid "550ee997-7ca6-46a7-9f39-14eb421476f3")
 	)
 	(junction
+		(at 104.14 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6d85e397-b881-460a-adda-e61b95eddc94")
+	)
+	(junction
 		(at 199.39 76.2)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8510a5dd-a596-49e4-b250-7d9415ac2d9e")
+	)
+	(junction
+		(at 152.4 77.47)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "90e0f635-4632-4620-b945-60a93d204dfc")
 	)
 	(junction
 		(at 166.37 76.2)
@@ -1677,6 +1689,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f301b6bf-5693-457a-9f6b-059abd339f67")
+	)
+	(junction
+		(at 90.17 133.35)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fc2a0bc4-3f3b-46fb-8e84-c03271bacfb2")
 	)
 	(junction
 		(at 168.91 76.2)
@@ -1774,6 +1792,16 @@
 	)
 	(wire
 		(pts
+			(xy 152.4 69.85) (xy 152.4 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "23e16f44-2348-48fd-8f24-5e61617c8d53")
+	)
+	(wire
+		(pts
 			(xy 158.75 133.35) (xy 184.15 133.35)
 		)
 		(stroke
@@ -1784,7 +1812,7 @@
 	)
 	(wire
 		(pts
-			(xy 148.59 77.47) (xy 153.67 77.47)
+			(xy 148.59 77.47) (xy 152.4 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1794,7 +1822,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 133.35) (xy 96.52 133.35)
+			(xy 82.55 133.35) (xy 90.17 133.35)
 		)
 		(stroke
 			(width 0)
@@ -1864,7 +1892,7 @@
 	)
 	(wire
 		(pts
-			(xy 96.52 77.47) (xy 118.11 77.47)
+			(xy 96.52 77.47) (xy 104.14 77.47)
 		)
 		(stroke
 			(width 0)
@@ -1981,6 +2009,16 @@
 			(type default)
 		)
 		(uuid "9c177248-5144-4e82-bcdd-2b64a724624b")
+	)
+	(wire
+		(pts
+			(xy 152.4 77.47) (xy 153.67 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a08840c0-f532-40ad-8830-cb6347ceea11")
 	)
 	(wire
 		(pts
@@ -2114,6 +2152,16 @@
 	)
 	(wire
 		(pts
+			(xy 104.14 77.47) (xy 118.11 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d9c14975-2266-4ce2-b777-b37a6b7c1997")
+	)
+	(wire
+		(pts
 			(xy 168.91 76.2) (xy 171.45 76.2)
 		)
 		(stroke
@@ -2174,6 +2222,16 @@
 	)
 	(wire
 		(pts
+			(xy 90.17 133.35) (xy 96.52 133.35)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f2bda160-1f86-483f-b816-53ce75cb6fa6")
+	)
+	(wire
+		(pts
 			(xy 158.75 77.47) (xy 158.75 95.25)
 		)
 		(stroke
@@ -2212,7 +2270,7 @@
 		)
 		(uuid "d2a3ddd2-997e-4880-8938-46a6a8c9dda1")
 	)
-	(label "VBUS_PROT"
+	(label "VBUS_PRO"
 		(at 156.21 77.47 0)
 		(effects
 			(font
@@ -2222,7 +2280,7 @@
 		)
 		(uuid "dc1eeb0d-f386-4034-879d-dc5fc888f1e3")
 	)
-	(global_label "3V3"
+	(global_label "+3V3"
 		(shape input)
 		(at 214.63 76.2 0)
 		(fields_autoplaced yes)
@@ -2245,7 +2303,7 @@
 		)
 	)
 	(symbol
-		(lib_id "Regulator_Linear:MCP1727-0802xMF")
+		(lib_id "Regulator_Linear:MCP1727-3302xMF")
 		(at 184.15 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2253,8 +2311,8 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "0257f7da-21f9-4a63-b1b3-1eca2ab3ca9a")
-		(property "Reference" "U1"
+		(uuid "00b19a07-0572-45e9-976b-b98143335a8a")
+		(property "Reference" "U2"
 			(at 184.15 68.58 0)
 			(effects
 				(font
@@ -2262,7 +2320,7 @@
 				)
 			)
 		)
-		(property "Value" "MCP1727-0802xMF"
+		(property "Value" "MCP1727-3302xMF"
 			(at 184.15 71.12 0)
 			(effects
 				(font
@@ -2288,7 +2346,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "1.5A, Low Voltage, Low Quiescent Current LDO Regulator, 2.3 - 6V Input, Fixed 0.8V Output, 330mV Dropout, DFN-8"
+		(property "Description" "1.5A, Low Voltage, Low Quiescent Current LDO Regulator, 2.3 - 6V Input, Fixed 3.3V Output, 330mV Dropout, DFN-8"
 			(at 184.15 78.74 0)
 			(effects
 				(font
@@ -2297,37 +2355,37 @@
 				(hide yes)
 			)
 		)
-		(pin "4"
-			(uuid "7604abd5-61ce-4ea7-8ccd-dbd195e573d7")
-		)
-		(pin "5"
-			(uuid "47ec3e87-92cf-4de5-99da-32b07cb852c6")
-		)
 		(pin "8"
-			(uuid "1d51736b-bb1c-4ebc-a5a4-1234aea26458")
-		)
-		(pin "7"
-			(uuid "a7ae4a04-ae93-4b1b-a2b2-ad361d78ff18")
-		)
-		(pin "1"
-			(uuid "a996eb2b-7038-43a8-86f6-51b38cb6c7a1")
-		)
-		(pin "2"
-			(uuid "2f744556-0e65-40d3-9d68-160a774ebf6d")
-		)
-		(pin "3"
-			(uuid "9e9923fb-3c06-41de-b6ea-9fab48b3bfda")
-		)
-		(pin "9"
-			(uuid "9fecec76-ac05-48d9-ad3f-f765afa2aa08")
+			(uuid "01ddad02-3cc1-476c-b5b0-d7cdca227933")
 		)
 		(pin "6"
-			(uuid "6e610c40-fdde-4f92-a1be-2f65a664d92b")
+			(uuid "ff30fc3f-2119-47d5-81b9-a56d61bef43a")
+		)
+		(pin "9"
+			(uuid "b6df75dc-9055-4910-ab8b-cca817191be0")
+		)
+		(pin "1"
+			(uuid "4ae05456-7712-4dc5-ab0e-41e9aa36c0c1")
+		)
+		(pin "7"
+			(uuid "734f02f2-0d4c-438f-b6e0-2119dcb067c5")
+		)
+		(pin "2"
+			(uuid "aa12c750-1942-47b4-af6d-3a0542c4de32")
+		)
+		(pin "3"
+			(uuid "328a0d41-7a40-49f7-8905-f7fd6e17bf2c")
+		)
+		(pin "5"
+			(uuid "559f043e-b3f6-4e57-a028-cdda60bd0f41")
+		)
+		(pin "4"
+			(uuid "20dd3135-6c7d-4cdd-8888-cb475ef2d31b")
 		)
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
-					(reference "U1")
+					(reference "U2")
 					(unit 1)
 				)
 			)
@@ -2534,6 +2592,73 @@
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
 					(reference "R_CC2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 152.4 69.85 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "22336991-a34a-4a73-a0f8-9817e9ce29a4")
+		(property "Reference" "TP4"
+			(at 154.94 65.2779 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TP_VBUS_PRO"
+			(at 154.94 67.8179 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 157.48 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 157.48 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 152.4 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "edac6f46-1d4d-4d1d-8a33-e0ec29788286")
+		)
+		(instances
+			(project ""
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
+					(reference "TP4")
 					(unit 1)
 				)
 			)
@@ -3171,6 +3296,73 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
+		(at 90.17 133.35 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d63cf4aa-e1da-45c8-867d-b772450a1042")
+		(property "Reference" "TP2"
+			(at 92.71 128.7779 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TP_GND"
+			(at 92.71 131.3179 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 95.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 95.25 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 90.17 133.35 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2d2abf2c-831f-4a89-a822-c04eebfb2fa4")
+		)
+		(instances
+			(project ""
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
+					(reference "TP2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
 		(at 227.33 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -3179,7 +3371,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "de5a5551-6b7c-4851-956f-5fb533c8f913")
-		(property "Reference" "TP1"
+		(property "Reference" "TP3"
 			(at 229.87 71.6279 0)
 			(effects
 				(font
@@ -3188,7 +3380,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "TP_3V3"
 			(at 229.87 74.1679 0)
 			(effects
 				(font
@@ -3230,7 +3422,7 @@
 		(instances
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
-					(reference "TP1")
+					(reference "TP3")
 					(unit 1)
 				)
 			)
@@ -3301,6 +3493,73 @@
 			(project ""
 				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
 					(reference "C_IN2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 104.14 77.47 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ff89bd2d-dc73-4cd4-9c29-9f2405cb7ad5")
+		(property "Reference" "TP1"
+			(at 106.68 72.8979 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TP_VBUS"
+			(at 106.68 75.4379 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 109.22 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 109.22 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 104.14 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dbea7446-afb0-4603-a0ef-32badfcc3c58")
+		)
+		(instances
+			(project ""
+				(path "/7b66d93d-d6d0-4bd4-83b3-6fc711e21073"
+					(reference "TP1")
 					(unit 1)
 				)
 			)
