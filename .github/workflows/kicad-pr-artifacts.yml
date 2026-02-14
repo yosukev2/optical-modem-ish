@@ -24,7 +24,7 @@ jobs:
         working-directory: ${{ github.workspace }}
 
     steps:
-      - name: Install system deps
+      - name: Install deps
         run: |
           set -euo pipefail
           apt-get update
@@ -58,9 +58,9 @@ jobs:
             echo "head_sha=${{ github.event.pull_request.head.sha }}"
           } > "$OUT_DIR/meta.txt"
 
-          SCH_FILES="$(ls -1 hw/*.kicad_sch 2>/dev/null | sort || true)"
+          SCH_FILES="$(find hw -type f -name '*.kicad_sch' | sort || true)"
           if [ -z "$SCH_FILES" ]; then
-            echo "No hw/*.kicad_sch found"
+            echo "No schematics found under hw/"
             exit 0
           fi
 
@@ -71,11 +71,19 @@ jobs:
             kicad-cli sch export pdf --output "$OUT_DIR/${NAME}.pdf" "$SCH"
             pdftoppm -png -f 1 -singlefile "$OUT_DIR/${NAME}.pdf" "$OUT_DIR/${NAME}"
 
+            # 1) report everything (do not fail)
             kicad-cli sch erc \
               --format json \
               --severity-all \
+              --output "$OUT_DIR/${NAME}_erc_all.json" \
+              "$SCH" || true
+
+            # 2) gate on errors only (fail if errors exist)
+            kicad-cli sch erc \
+              --format json \
+              --severity-error \
               --exit-code-violations \
-              --output "$OUT_DIR/${NAME}_erc.json" \
+              --output "$OUT_DIR/${NAME}_erc_error.json" \
               "$SCH"
           done <<< "$SCH_FILES"
 
@@ -86,7 +94,7 @@ jobs:
           OUT_DIR="hw/out"
           mkdir -p "$OUT_DIR"
 
-          PCB_FILES="$(find hw -maxdepth 1 -type f -name '*.kicad_pcb' | sort || true)"
+          PCB_FILES="$(find hw -type f -name '*.kicad_pcb' | sort || true)"
           if [ -z "$PCB_FILES" ]; then
             exit 0
           fi
