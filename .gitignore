@@ -1,3 +1,7 @@
+# =========================================
+# Build artifacts (C/C++/embedded general)
+# =========================================
+
 # Prerequisites
 *.d
 
@@ -28,7 +32,7 @@
 *.so.*
 *.dylib
 
-# Executables
+# Executables / firmware images
 *.exe
 *.out
 *.app
@@ -53,30 +57,59 @@ dkms.conf
 
 # debug information files
 *.dwo
-# ===== KiCad: user/local state (do NOT commit) =====
+
+
+# =========================================
+# KiCad: user/local state (do NOT commit)
+# =========================================
+
+# Project local UI state (window positions, recent files, etc.)
 *.kicad_prl
+
+# KiCad backup files
 *.kicad_pro-bak
 *.kicad_sch-bak
 *.kicad_pcb-bak
 *.kicad_sym-bak
+*.kicad_mod-bak
 
-# Backups / autosave / locks
-*-backups/
+# Autosave files / lock files
 _autosave-*
 *.lck
 
-# KiCad cache
+# KiCad backup folders (common pattern)
+*-backups/
+_backups/
+backups/
+
+# KiCad caches
 fp-info-cache
 
-# ===== Outputs (generated artifacts) =====
-out/
 
-# ===== OS / editor noise =====
+# =========================================
+# Outputs (generated artifacts)
+# =========================================
+
+# Generic output folder(s)
+out/
+hw/out/
+
+# Common manufacturing/export outputs (if they appear)
+gerbers/
+gerber/
+fabrication/
+manufacturing/
+exports/
+export/
+
+
+# =========================================
+# OS / editor noise
+# =========================================
+
 .DS_Store
 Thumbs.db
 Desktop.ini
+
 .vscode/
 .idea/
-# Generated outputs (do NOT commit)
-out/
-hw/out/

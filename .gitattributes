@@ -1,0 +1,15 @@
+# KiCad text files: always LF in repo
+*.kicad_pro text eol=lf
+*.kicad_sch text eol=lf
+*.kicad_pcb text eol=lf
+*.kicad_sym text eol=lf
+*.kicad_mod text eol=lf
+*.kicad_dru text eol=lf
+*.kicad_wks text eol=lf
+*.kicad_jobset text eol=lf
+
+# CAD/3D assets as binary
+*.step binary
+*.stp  binary
+*.wrl  binary
+*.glb  binary
