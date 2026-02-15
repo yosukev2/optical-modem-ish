@@ -1,0 +1,44 @@
+meta:
+  version: "0.1"
+  owner: "docs/kicad_git_workflow.md"
+  purpose: "Hardware net naming source of truth"
+  naming_rules:
+    - "Use canonical names exactly as listed in this file."
+    - "Do not introduce aliases for existing power nets."
+    - "Use +3V3 (not bare 3V3) for the board 3.3V rail."
+    - "Use VBUS_PRO (not VBUS_PROT) for the protected VBUS node."
+  deprecated_aliases:
+    VBUS_PROT: "Use VBUS_PRO"
+    "3V3": "Use +3V3"
+
+canonical_nets:
+  - name: "+3V3"
+    class: power
+    status: fixed
+    description: "Primary 3.3V rail after LDO output."
+  - name: "GND"
+    class: power
+    status: fixed
+    description: "System ground reference."
+  - name: "VBUS_IN"
+    class: power
+    status: fixed
+    description: "Raw USB VBUS input before protection."
+  - name: "VBUS_PRO"
+    class: power
+    status: fixed
+    description: "Protected VBUS node after Polyfuse/TVS path."
+  - name: "+5V"
+    class: power
+    status: fixed
+    description: "Usable 5V rail when explicitly distributed."
+
+reserved_nets:
+  - name: "PICO_VSYS"
+    class: reserved
+    status: reserved
+    description: "Reserved Pico VSYS domain name. Keep isolated from +3V3 unless explicitly designed."
+  - name: "PICO_3V3_OUT"
+    class: reserved
+    status: reserved
+    description: "Reserved Pico onboard regulator output name. Do not short directly to board +3V3 by default."

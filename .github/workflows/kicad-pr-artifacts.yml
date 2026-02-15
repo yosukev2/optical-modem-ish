@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - "hw/**"
+      - "scripts/ci/erc_changed_gate.sh"
       - ".github/workflows/kicad-pr-artifacts.yml"
 
 concurrency:
@@ -35,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           submodules: recursive
 
       - name: Mark workspace as safe for git
@@ -43,6 +44,14 @@ jobs:
           set -euo pipefail
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$(pwd)"
+
+      - name: ERC gate (changed schematics only: error=0, warning=0)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          bash scripts/ci/erc_changed_gate.sh "$BASE_SHA" "$HEAD_SHA"
 
       - name: Export PDF + run ERC (all schematics)
         run: |
@@ -78,13 +87,12 @@ jobs:
               --output "$OUT_DIR/${NAME}_erc_all.json" \
               "$SCH" || true
 
-            # 2) gate on errors only (fail if errors exist)
+            # 2) report errors only (artifact purpose, non-blocking)
             kicad-cli sch erc \
               --format json \
               --severity-error \
-              --exit-code-violations \
               --output "$OUT_DIR/${NAME}_erc_error.json" \
-              "$SCH"
+              "$SCH" || true
           done <<< "$SCH_FILES"
 
       - name: Run DRC (if any .kicad_pcb exists) [non-blocking]

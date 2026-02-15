@@ -1,0 +1,48 @@
+meta:
+  version: "0.1"
+  owner: "docs/kicad_git_workflow.md"
+  purpose: "Cross-step hardware interface contract source of truth"
+  required_fields:
+    - direction
+    - voltage
+    - drive
+    - responsibility
+    - exposed_as
+  enums:
+    direction: [in, out, bidir]
+    voltage: [3v3, 5v, vsys, gnd, other]
+    drive: [push_pull, open_drain, clock, analog]
+    exposed_as: [sheet_pin, local_label, global_label, test_point, connector]
+  responsibility_keys:
+    - pull
+    - series_r
+    - esd
+    - level_shift
+
+# NOTE:
+# - Add each cross-sheet signal contract under "contracts".
+# - Every entry must include all required fields above.
+contracts:
+  - name: GP_TX
+    direction: out
+    voltage: 3v3
+    drive: push_pull
+    responsibility:
+      pull: none
+      series_r: step02_io
+      esd: step02_io
+      level_shift: not_required
+    exposed_as: sheet_pin
+    notes: "Example entry. Final values must be reviewed when Step02 is defined."
+
+  - name: GP_RX
+    direction: in
+    voltage: 3v3
+    drive: push_pull
+    responsibility:
+      pull: step03_mcu
+      series_r: step02_io
+      esd: step02_io
+      level_shift: not_required
+    exposed_as: sheet_pin
+    notes: "Example entry. Final values must be reviewed when Step02 is defined."
