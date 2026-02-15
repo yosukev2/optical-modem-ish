@@ -1,3 +1,4 @@
 pyserial
 pandas
 rich
+circuit_synth
