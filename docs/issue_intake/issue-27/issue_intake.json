@@ -1,0 +1,52 @@
+{
+  "issue": {
+    "number": 27,
+    "title": "[Task] [W4-01] Picoヘッダ（コネクタ）を回路図に追加し、電源・GNDを明示する",
+    "url": "https://github.com/yosukev2/optical-modem-ish/issues/27",
+    "state": "OPEN",
+    "labels": [
+      "hw",
+      "P1",
+      "needs-triage",
+      "type: chore"
+    ]
+  },
+  "parent": null,
+  "type": "implementation",
+  "type_note": "回路図へPicoヘッダを追加し、+3V3/GND接続を実装する内容が中心で、規約変更自体は主目的ではないため。",
+  "target_artifacts": [
+    "hw/step02_*.kicad_sch (候補)",
+    "hw/hw.kicad_sch (統合PR時のみ候補)",
+    "docs/hw/interface_contract.yml (必要時の契約更新候補)"
+  ],
+  "acceptance_criteria": [
+    "Picoヘッダが回路図に追加され、ピン番号が表現されている",
+    "Picoヘッダの3.3V/GNDが +3V3 / GND に接続されている",
+    "ERCがエラー0件、警告0件である"
+  ],
+  "interface_mentions": {
+    "power": [
+      "+3V3",
+      "GND",
+      "3.3V"
+    ],
+    "signals": []
+  },
+  "required_symbols": [
+    "connector",
+    "power_symbol",
+    "net_label"
+  ],
+  "tests_expected": [
+    "ERC on changed .kicad_sch must be warning0 and error0",
+    "Picoヘッダ追加後の対象シートでERCが warning=0 / error=0 を満たすこと"
+  ],
+  "decisions_required": [
+    "採用するPicoヘッダの実体（ピン数・向き・シンボル）を確定する",
+    "どのStepシートにPicoヘッダを配置するか（step02系か、別stepか）を確定する"
+  ],
+  "stop_conditions": [
+    "採用品ヘッダ仕様（ピン数/向き）が未確定で、回路図上の接続先を決められない場合",
+    "対象の実装先シートが未確定で、変更ファイル境界を定義できない場合"
+  ]
+}
