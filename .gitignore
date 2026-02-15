@@ -1,7 +1,81 @@
 # =========================================
+# Local workspace (do NOT commit)
+# =========================================
+.worktrees/
+.claude/
+
+# Optional: local scratch
+.tmp/
+temp/
+.cache/
+
+# =========================================
+# OS / editor noise
+# =========================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.stackdump
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# =========================================
+# Logs
+# =========================================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================================
+# Python
+# =========================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+.envrc
+
+# =========================================
+# Node / TypeScript (if used)
+# =========================================
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.eslintcache
+*.eslintcache
+*.tsbuildinfo
+.next/
+out/
+.expo/
+.expo-shared/
+
+# =========================================
+# Env files (never commit secrets)
+# =========================================
+.env
+.env.*
+**/.env
+**/.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================================
 # Build artifacts (C/C++/embedded general)
 # =========================================
-
 # Prerequisites
 *.d
 
@@ -58,11 +132,9 @@ dkms.conf
 # debug information files
 *.dwo
 
-
 # =========================================
 # KiCad: user/local state (do NOT commit)
 # =========================================
-
 # Project local UI state (window positions, recent files, etc.)
 *.kicad_prl
 
@@ -78,38 +150,4 @@ _autosave-*
 *.lck
 
 # KiCad backup folders (common pattern)
-*-backups/
-_backups/
-backups/
-
-# KiCad caches
-fp-info-cache
-
-
-# =========================================
-# Outputs (generated artifacts)
-# =========================================
-
-# Generic output folder(s)
-out/
-hw/out/
-
-# Common manufacturing/export outputs (if they appear)
-gerbers/
-gerber/
-fabrication/
-manufacturing/
-exports/
-export/
-
-
-# =========================================
-# OS / editor noise
-# =========================================
-
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-.vscode/
-.idea/
+*-back*
