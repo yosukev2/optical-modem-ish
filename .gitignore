@@ -43,7 +43,10 @@ __pycache__/
 .venv/
 venv/
 ENV/
+.python-version
 .envrc
+# circuit_synth local cache (created under current working directory)
+**/.cache/kicad-library-sourcing/
 
 # =========================================
 # Node / TypeScript (if used)
