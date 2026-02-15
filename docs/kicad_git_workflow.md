@@ -8,15 +8,19 @@
 **原則：KiCadプロジェクトは `hw/` 配下に置く。規約は `docs/` に集約する。**
 
 hw/
-hw.kicad_pro
-hw.kicad_sch # Step00（正本）
-step01_power.kicad_sch # Step01以降
-(必要になったら) hw.kicad_pcb
-(必要になったら) sym-lib-table
-(必要になったら) fp-lib-table
+  hw.kicad_pro
+  hw.kicad_sch # Step00（正本）
+  step01_power.kicad_sch # Step01以降
+  (必要になったら) hw.kicad_pcb
+  (必要になったら) sym-lib-table
+  (必要になったら) fp-lib-table
 lib/ # 外部ライブラリは必要時のみ（追加は別Issue）
 docs/
-kicad_git_workflow.md # このファイル（運用の単一の真実）
+  kicad_git_workflow.md # このファイル（運用の単一の真実）
+  hw/
+    nets.yml # ネット名辞書の正本（canonical）
+    interface_contract.yml # Step間I/F契約の正本
+    circuit_synth_policy.md # Circuit-Synth運用規約の正本
 out/ # 生成物（原則git管理しない）
 
 
@@ -115,6 +119,9 @@ PRでは `git diff --name-status <base> <head>` の差分だけを対象に、�
   `^hw/step[0-9][0-9]_[^/]+\.kicad_sch$` に一致しない場合FAIL
 - `hw/hw.kicad_sch` が差分に含まれるPRは、ラベル `integration-pr` が無ければFAIL
   - `integration-pr` がある統合PRのみ、Step00変更を許可
+- 変更された `hw/*.kicad_sch`（追加/変更/改名）だけに対して ERC を実行し、`error=0` かつ `warning=0` を必須化
+  - 実装スクリプト: `scripts/ci/erc_changed_gate.sh`
+  - 判定対象は差分ベース（`BASE_SHA` と `HEAD_SHA` の比較）
 
 ### 5.3 PRに必ず添付する“証跡”（Evidence）
 GUI編集のため、差分だけだとレビューが難しい。  
@@ -171,6 +178,13 @@ PRを出す前に、ローカルで証跡（PDF/ERC/DRC）を生成して内容�
 .\scripts\kicad\gen_evidence.ps1 -ProjectPath "hw/hw.kicad_pro"
 ```
 
+### 8.2.1 変更シートだけERCゲートを再現（bash）
+
+```bash
+# BASE/HEAD はCIと同じく差分比較で指定
+bash scripts/ci/erc_changed_gate.sh "$BASE_SHA" "$HEAD_SHA"
+```
+
 ### 8.3 生成されるファイル
 
 出力先: `hw/out/`
@@ -179,10 +193,11 @@ PRを出す前に、ローカルで証跡（PDF/ERC/DRC）を生成して内容�
 |---------|------|
 | `{名前}.pdf` | 回路図PDF |
 | `{名前}_erc_all.json` | ERC結果（全severity） |
-| `{名前}_erc_error.json` | ERC結果（エラーのみ、gating用） |
+| `{名前}_erc_error.json` | ERC結果（エラーのみ、artifact確認用） |
+| `erc/{名前}_erc_changed.json` | 変更シートERCゲート結果（error/warning判定用） |
 | `{名前}_drc.json` | DRC結果（pcbがある場合のみ） |
 
-例: `hw/hw.kicad_sch` の場合 → `hw/out/hw.pdf`, `hw/out/hw_erc_all.json`, `hw/out/hw_erc_error.json`
+例: `hw/hw.kicad_sch` の場合 → `hw/out/hw.pdf`, `hw/out/hw_erc_all.json`, `hw/out/hw_erc_error.json`, `hw/out/erc/hw_erc_changed.json`
 
 ### 8.4 hw/out/ はコミットしない
 
@@ -211,6 +226,7 @@ PRをpushすると、GitHub ActionsがArtifacts (`kicad-pr-{PR番号}`) を生�
 - [ ] `*.kicad_prl` / `*-backups/` / `_autosave-*` / `*.lck` / `out/` / `hw/out/` はGitに入れない
 - [ ] Step00正本は `hw/hw.kicad_sch` とし、通常PRでは触らない（統合PR + `integration-pr` ラベル時のみ許可）
 - [ ] 回路図（Step01以降）は `^hw/step[0-9][0-9]_[^/]+\.kicad_sch$` の命名規約を守る
+- [ ] ハード契約（ネット名/I/F契約/Circuit-Synth運用）は `docs/hw/` の正本に従う
 - [ ] PRは基本 1PR=1Step で小さく積み上げる
 - [ ] PRに回路図PDF（またはスクショ）とERC/DRC結果を添付する
 - [ ] 外部ライブラリ追加は必ずIssueを分け、理由/出典/版を残す
